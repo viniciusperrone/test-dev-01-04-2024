@@ -34,7 +34,7 @@ class Consumer(models.Model):
     distributor_tax = models.FloatField(
         "Tarifa da Distribuidora", blank=True, null=True
     )
-    discount_rule = models.OneToOneField(DiscountRules, on_delete=models.CASCADE, related_name="discount_rule")
+    discount_rule = models.OneToOneField(DiscountRules, blank=True, null=True, on_delete=models.CASCADE, related_name="discount_rule", verbose_name="Desconto")
     #  create the foreign key for discount rule model here
 
 # TODO: Create the model DiscountRules below
