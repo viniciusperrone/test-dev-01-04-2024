@@ -24,6 +24,15 @@ class DiscountRules(models.Model):
     cover_value = models.CharField("Cobertura", choices=CHOICES_COVER, max_length=128)
     discount_value = models.FloatField("Desconto")
 
+    class Meta:
+        verbose_name = "Desconto"
+        verbose_name_plural = "Descontos"
+
+    def __str__(self) -> str:
+        return f"Desconto: #{self.id}"
+
+
+
 class Consumer(models.Model):
     name = models.CharField("Nome do Consumidor", max_length=128)
     document = models.CharField("Documento(CPF/CNPJ)", max_length=14, unique=True)
@@ -35,6 +44,13 @@ class Consumer(models.Model):
         "Tarifa da Distribuidora", blank=True, null=True
     )
     discount_rule = models.OneToOneField(DiscountRules, blank=True, null=True, on_delete=models.CASCADE, related_name="discount_rule", verbose_name="Desconto")
+
+    class Meta:
+        verbose_name = "Consumidor"
+        verbose_name_plural = "Consumidors"
+
+    def __str__(self) -> str:
+        return f"Consumidor: {self.name}"
     #  create the foreign key for discount rule model here
 
 # TODO: Create the model DiscountRules below
