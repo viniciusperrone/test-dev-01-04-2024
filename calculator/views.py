@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from .models import Consumer
+
 
 # TODO: Your list view should do the following tasks
 """
@@ -10,7 +12,15 @@ from django.shortcuts import render
 
 
 def list_view(request):
-    return render(request, 'calculator/list.html')
+    list_consumers = Consumer.objects.all()
+    count_consumers = Consumer.objects.count()
+
+    context = {
+        'list_consumers': list_consumers,
+        'count_consumers': count_consumers,
+    }
+
+    return render(request, 'calculator/list.html', context=context)
     # Create the first view here.
 
 

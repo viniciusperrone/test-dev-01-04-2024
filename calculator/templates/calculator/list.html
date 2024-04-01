@@ -14,5 +14,32 @@ TODO: You must provide 2 selects to filter the rows based in:
  2) consumption range
  - You must create the filter functionality in the front-end using JS
 -->
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Documento</th>
+          <th>Consumo</th>
+          <th>Tipo</th>
+          <th>Cobertura</th>
+          <th>Desconto</th>
+          <th>Economia</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for consumer in list_consumers %}
+        <tr>
+          <td>{{ consumer.name }}</td>
+          <td>{{ consumer.document }}</td>
+          <td>{{ consumer.consumption }}</td>
+          <td>{{ consumer.discount_rule.consumer_type }}</td>
+          <td>{{ consumer.discount_rule.cover_value }}</td>
+          <td>{{ consumer.discount_rule.discount_value }}</td>
+          <td>{{ consumer.discount_rule.percentage_discount }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <span>Total de Consumidores: {{ count_consumers }}</span>
   </body>
 </html>

@@ -22,6 +22,7 @@ class DiscountRules(models.Model):
     consumer_type = models.CharField("Tipo de Consumidor", choices=CHOICES_CONSUMER, max_length=128)
     consumption_range = models.CharField("Faixa de Consumo", choices=CHOICES_CONSUMPTION_RANGE, max_length=128)
     cover_value = models.CharField("Cobertura", choices=CHOICES_COVER, max_length=128)
+    percentage_discount = models.CharField("Desconto Percentual", blank=True, null=True, max_length=128)
     discount_value = models.FloatField("Desconto")
 
     class Meta:
