@@ -9,9 +9,9 @@ from django.shortcuts import render
 """
 
 
-def view1(request):
+def list_view(request):
+    return render(request, 'calculator/list.html')
     # Create the first view here.
-    pass
 
 
 # TODO: Your create view should do the following tasks

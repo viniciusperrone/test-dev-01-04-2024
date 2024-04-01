@@ -1,17 +1,5 @@
 from django.db import models
 
-class Consumer(models.Model):
-    name = models.CharField("Nome do Consumidor", max_length=128)
-    document = models.CharField("Documento(CPF/CNPJ)", max_length=14, unique=True)
-    zip_code = models.CharField("CEP", max_length=8, null=True, blank=True)
-    city = models.CharField("Cidade", max_length=128)
-    state = models.CharField("Estado", max_length=128)
-    consumption = models.IntegerField("Consumo(kWh)", blank=True, null=True)
-    distributor_tax = models.FloatField(
-        "Tarifa da Distribuidora", blank=True, null=True
-    )
-    #  create the foreign key for discount rule model here
-
 class DiscountRules(models.Model):
     CHOICES_CONSUMER = (
         ('COMERCIAL', 'Comercial'),
@@ -35,6 +23,19 @@ class DiscountRules(models.Model):
     consumption_range = models.CharField("Faixa de Consumo", choices=CHOICES_CONSUMPTION_RANGE, max_length=128)
     cover_value = models.CharField("Cobertura", choices=CHOICES_COVER, max_length=128)
     discount_value = models.FloatField("Desconto")
+
+class Consumer(models.Model):
+    name = models.CharField("Nome do Consumidor", max_length=128)
+    document = models.CharField("Documento(CPF/CNPJ)", max_length=14, unique=True)
+    zip_code = models.CharField("CEP", max_length=8, null=True, blank=True)
+    city = models.CharField("Cidade", max_length=128)
+    state = models.CharField("Estado", max_length=128)
+    consumption = models.IntegerField("Consumo(kWh)", blank=True, null=True)
+    distributor_tax = models.FloatField(
+        "Tarifa da Distribuidora", blank=True, null=True
+    )
+    discount_rule = models.OneToOneField(DiscountRules, on_delete=models.CASCADE, related_name="discount_rule")
+    #  create the foreign key for discount rule model here
 
 # TODO: Create the model DiscountRules below
 """Fields:
