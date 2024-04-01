@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Consumer(models.Model):
     name = models.CharField("Nome do Consumidor", max_length=128)
     document = models.CharField("Documento(CPF/CNPJ)", max_length=14, unique=True)
@@ -13,6 +12,29 @@ class Consumer(models.Model):
     )
     #  create the foreign key for discount rule model here
 
+class DiscountRules(models.Model):
+    CHOICES_CONSUMER = (
+        ('COMERCIAL', 'Comercial'),
+        ('RESIDENCIAL', 'Residencial'),
+        ('INDUSTRIAL', 'Industrial'),
+    )
+
+    CHOICES_COVER = (
+        ('90%', '90%'),
+        ('95%', '95%'),
+        ('99%', '99%'),
+    )
+
+    CHOICES_CONSUMPTION_RANGE = (
+        ('< 10.000 kWh', '< 10.000 kWh'),
+        ('>= 10.000 kWh e <= 20.000 kWh', '>= 10.000 kWh e <= 20.000 kWh'),
+        ('> 20.000 kWh', '> 20.000 kWh'),
+    )
+
+    consumer_type = models.CharField("Tipo de Consumidor", choices=CHOICES_CONSUMER, max_length=128)
+    consumption_range = models.CharField("Faixa de Consumo", choices=CHOICES_CONSUMPTION_RANGE, max_length=128)
+    cover_value = models.CharField("Cobertura", choices=CHOICES_COVER, max_length=128)
+    discount_value = models.FloatField("Desconto")
 
 # TODO: Create the model DiscountRules below
 """Fields:
