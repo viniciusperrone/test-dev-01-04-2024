@@ -12,7 +12,7 @@ sys.path.append(project_directory)
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 django.setup()
 
-from calculator.models import Consumer
+from calculator.models import Consumer, DiscountRules
 
 excel_file = os.path.join(os.path.dirname(__file__), '..', 'consumers.xlsx')
 
@@ -31,6 +31,49 @@ def import_data_from_excel():
         cover_value = row['Cobertura(%)']
 
         try:
+          consumption_range = "< 10.000 kWh"
+          parse_consumption_to_float = float(consumption)
+          parse_distributor_tax_to_float = float(distributor_tax)
+          discount_value = 20000.00
+
+          if(parse_consumption_to_float < 10000):
+            if(consumer_type == 'Residencial'):
+               discount_value = parse_distributor_tax_to_float * (100 - 18) / 100
+            if(consumer_type == 'Comercial'):
+               discount_value = parse_distributor_tax_to_float * (100 - 22) / 100
+            if(consumer_type == 'Industrial'):
+               discount_value = parse_distributor_tax_to_float * (100 - 25) / 100
+
+          if(parse_consumption_to_float >= 10000 and parse_consumption_to_float <= 20000):
+            consumption_range = ">= 10.000 kWh e <= 20.000 kWh"
+
+            if(consumer_type == 'Residencial'):
+               discount_value = parse_distributor_tax_to_float * (100 - 16) / 100
+            if(consumer_type == 'Comercial'):
+               discount_value = parse_distributor_tax_to_float * (100 - 18) / 100
+            if(consumer_type == 'Industrial'):
+               discount_value = parse_distributor_tax_to_float * (100 - 22) / 100
+
+          if(parse_consumption_to_float > 20000):
+            consumption_range = "> 20.000 kWh"
+
+            if(consumer_type == 'Residencial'):
+               discount_value = parse_distributor_tax_to_float * (100 - 12) / 100
+            if(consumer_type == 'Comercial'):
+               discount_value = parse_distributor_tax_to_float * (100 - 15) / 100
+            if(consumer_type == 'Industrial'):
+               discount_value = parse_distributor_tax_to_float * (100 - 28) / 100
+
+
+          discount_rules = DiscountRules(
+              consumer_type=consumer_type,
+              cover_value=cover_value,
+              consumption_range=consumption_range,
+              discount_value=discount_value
+          )
+
+          discount_rules.save()
+
           consumer = Consumer(
                 name=name,
                 document=document,
@@ -38,6 +81,7 @@ def import_data_from_excel():
                 state=state,
                 consumption=consumption,
                 distributor_tax=distributor_tax,
+                discount_rule=discount_rules
             )
           
           consumer.save()
