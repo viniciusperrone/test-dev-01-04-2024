@@ -1,0 +1,85 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% tailwind_css %}
+    <meta charset="UTF-8" />
+    <title>Cadastro</title>
+  </head>
+  <body>
+    <!--
+TODO: You must display the data sent to the template in a table with the follow headers
+ - Nome, Documento, Consumo, Tipo, Cobertura, Desconto, Economia
+
+TODO: You must provide 2 selects to filter the rows based in:
+ 1) consumer type
+ 2) consumption range
+ - You must create the filter functionality in the front-end using JS
+-->
+    <div class="py-20 flex flex-col gap-10 items-center justify-center">
+      <h1 class="text-2xl font-bold text-center">Cadastrar Consumidor</h1>
+      <form
+        method="post"
+        class="w-full max-w-lg mx-auto flex flex-col items-center"
+      >
+        {% csrf_token %}
+        <div class="grid grid-cols-2 gap-4">
+          <div class="mb-4">
+            <label for="id_name" class="block text-gray-700 font-bold mb-2"
+              >Nome:</label
+            >
+            {{ form.name }}
+          </div>
+          <div class="mb-4">
+            <label for="id_document" class="block text-gray-700 font-bold mb-2"
+              >Documento:</label
+            >
+            {{ form.document }}
+          </div>
+          <div class="mb-4">
+            <label for="id_zip_code" class="block text-gray-700 font-bold mb-2"
+              >CEP:</label
+            >
+            {{ form.zip_code }}
+          </div>
+          <div class="mb-4">
+            <label for="id_city" class="block text-gray-700 font-bold mb-2"
+              >Cidade:</label
+            >
+            {{ form.city }}
+          </div>
+          <div class="mb-4">
+            <label for="id_state" class="block text-gray-700 font-bold mb-2"
+              >Estado:</label
+            >
+            {{ form.state }}
+          </div>
+          <div class="mb-4">
+            <label
+              for="id_consumption"
+              class="block text-gray-700 font-bold mb-2"
+              >Consumo:</label
+            >
+            {{ form.consumption }}
+          </div>
+          <div class="mb-4">
+            <label
+              for="id_distributor_tax"
+              class="block text-gray-700 font-bold mb-2"
+              >Taxa da Distribuidora:</label
+            >
+            {{ form.distributor_tax }}
+          </div>
+        </div>
+        <button
+          class="bg-red-200 p-4 rounded-md font-bold hover:bg-red-100"
+          type="submit"
+        >
+          Cadastrar
+        </button>
+      </form>
+      <!-- <span class="bg-red-200">Total de Consumidores: {{ count_consumers }}</span> -->
+    </div>
+  </body>
+</html>

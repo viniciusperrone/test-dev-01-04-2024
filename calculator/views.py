@@ -1,5 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import FileResponse, HttpResponse
+from django.conf import settings
+import os
+
 from .models import Consumer
+from .forms import ConsumerForm
+
 
 
 # TODO: Your list view should do the following tasks
@@ -35,6 +41,37 @@ this page must be provided in the main page.
 """
 
 
-def view2():
-    # Create the second view here.
-    pass
+def register_view(request):
+    list_consumers = Consumer.objects.all()
+    count_consumers = Consumer.objects.count()
+
+    def redirect_into_register_view(): 
+        print("clickou")
+
+    context = {
+        'list_consumers': list_consumers,
+        'count_consumers': count_consumers,
+        'redirect_into_register_view': redirect_into_register_view
+    }
+
+    return render(request, 'calculator/register.html', context=context)
+
+def register_view(request):
+    if request.method == 'POST':
+        form = ConsumerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('list')
+    else:
+        form = ConsumerForm()
+    return render(request, 'calculator/register.html', {'form': form})
+
+def download_excel(request):
+    excel_file_path = os.path.join(settings.BASE_DIR, 'consumers.xlsx')
+
+    if os.path.exists(excel_file_path):
+        with open(excel_file_path, 'rb') as excel_file:
+            response = FileResponse(excel_file, as_attachment=True, filename='consumers.xlsx')
+            return response
+    else:
+        return HttpResponse('Arquivo não encontrado', status=404)
