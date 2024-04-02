@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import FileResponse, HttpResponse
 from django.conf import settings
 import os
+import openpyxl
 
 from .models import Consumer
 from .forms import ConsumerForm
@@ -61,6 +62,29 @@ def register_view(request):
         form = ConsumerForm(request.POST)
         if form.is_valid():
             form.save()
+
+            name = form.cleaned_data['name']
+            document = form.cleaned_data['document']
+            zip_code = form.cleaned_data['zip_code']
+            city = form.cleaned_data['city']
+            state = form.cleaned_data['state']
+            consumption = form.cleaned_data['consumption']
+            distributor_tax = form.cleaned_data['distributor_tax']
+
+            workbook = openpyxl.load_workbook('consumers.xlsx')
+            sheet = workbook.active
+
+            next_row = sheet.max_row + 1
+            sheet.cell(row=next_row, column=1, value=name)
+            sheet.cell(row=next_row, column=2, value=document)
+            sheet.cell(row=next_row, column=3, value=zip_code)
+            sheet.cell(row=next_row, column=4, value=city)
+            sheet.cell(row=next_row, column=5, value=state)
+            sheet.cell(row=next_row, column=6, value=consumption)
+            sheet.cell(row=next_row, column=7, value=distributor_tax)
+
+            workbook.save('consumers.xlsx')
+
             return redirect('list')
     else:
         form = ConsumerForm()
